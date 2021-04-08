@@ -1,9 +1,7 @@
-name: Jekyll site CI
+name: Build and Deploy
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
     branches: [ master ]
 
 jobs:
@@ -12,9 +10,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Build the site in the jekyll/builder container
-      run: |
-        docker run \
-        -v ${{ github.workspace }}:/srv/jekyll -v ${{ github.workspace }}/_site:/srv/jekyll/_site \
-        jekyll/builder:latest /bin/bash -c "chmod 777 /srv/jekyll && jekyll build --future"
+    - name: Deploy website
+      uses: appleboy/ssh-action@v0.1.2
+      with: 
+        host: ${{secrets.SSH_HOST}}
+        key: ${{secrets.SSH_KEY}}
+        username: ${{secrets.SSH_USERNAME}}
+        
+        script: |
+          mkdir test
+          cd test
+          git clone https://github.com/Alex-942/personal-website.git
+          echo 'Deployment successful to digital ocean'
+      
