@@ -21,5 +21,6 @@ jobs:
           mkdir test
           cd test
           git clone https://github.com/Alex-942/personal-website.git
+          rsync -r ~/test/personal-website/* /var/www/ucsddev.site/members/
           echo 'Deployment successful to digital ocean'
       
